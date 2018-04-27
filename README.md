@@ -5,7 +5,7 @@
 My system has the following components:
 
 * Apache Cassandra NoSQL database.
-  It is stores text lines from file (each line is a separate record), with line index as a primary key
+  It stores text lines from file (each line is a separate record), with line index as a primary key
 
 * Spring Boot-based Java application.
   It starts embedded instance of Tomcat server and handles HTTP GET requests for specific lines.
