@@ -47,7 +47,7 @@ When processing HTTP request for specific line, application fetches the line fro
 
 3. Running the system.
 
-    * To start application and load the file into cassandra:
+    * To start application and load the file into Cassandra:
       >run.sh file_path
 
     * To start application without loading the file:
@@ -57,27 +57,30 @@ When processing HTTP request for specific line, application fetches the line fro
 
 ### How will your system perform with a 1 GB file? a 10 GB file? a 100 GB file?
 
-There are several aspects:
+There are two aspects:
 
 1. Initial file loading
 
-   Definitely it's going to take longer and longer for larger files.
-   I'd like to investigate it furter and explore possible solutions. See the question below.
+   Loading time will grow linearly as the file size increase (though this is one-time hit at the server startup).
+   I'd like to investigate it furter and explore possible solutions to optimize loading. See the question below.
 
 2. Database scalability
 
-   We'll need to add more nodes to Cassandra cluster so support larger volumes of data.
+   Access for the particular line is performed by the primary key and should take close to constant time.
+   However we'll need to add more nodes to Cassandra cluster to support constant-time access on larger volumes of data.
 
 
 ### How will your system perform with 100 users? 10000 users? 1000000 users?
 
-As number of concurrent requests increase, we'll need to add more nodes to Cassandra cluster to distribute the work load.
-Definitely it will require to start cluster of multiple instances of Tomcat too, to handle larger amount HTTP requests.
+In the single server installation, response time will grow with the number of concurrent requests.
+We'll need to start cluster of multiple instances of Tomcat to handle larger number of requests.
+
+Also we may need to add more nodes to Cassandra cluster with replication factor greater than 1 (to have the same record present on multiple nodes).
 
 ### What documentation, websites, papers, etc did you consult in doing this assignment?
 
 * Cassandra help: http://cassandra.apache.org/doc/latest/
-* Various guides for Spring: https://spring.io/
+* Several guides for Spring from: https://spring.io/
 * Cassandra-unit help: https://github.com/jsevellec/cassandra-unit/wiki
 
 ### What third-party libraries or other tools does the system use? How did you choose each library or framework you used?
@@ -92,8 +95,8 @@ Definitely it will require to start cluster of multiple instances of Tomcat too,
 * Spring (Spring Core, Spring Boot, Spring Web, Spring Data Cassandra)
 
   This is widely used framework for rapid application development.
-  I used it to for dependency injection, rest services, database access.
-  It helped me eliminate most of boilerplate code and focus in the application logic.
+  I used it for dependency injection, rest services, database access.
+  It helped me to eliminate most of boilerplate code and focus on the application logic.
 
 * Cassandra-Unit (https://github.com/jsevellec/cassandra-unit)
 
