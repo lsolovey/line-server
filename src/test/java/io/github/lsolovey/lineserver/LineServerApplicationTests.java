@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestExecutionListeners(listeners = {
         CassandraUnitDependencyInjectionTestExecutionListener.class,
-        DependencyInjectionTestExecutionListener.class })
+        DependencyInjectionTestExecutionListener.class})
 @CassandraDataSet(keyspace = "lineServer", value = "keyspace.cql")
 @EmbeddedCassandra(timeout = 60000)
 public class LineServerApplicationTests
@@ -34,19 +34,19 @@ public class LineServerApplicationTests
     @Autowired
     private LineServerApplication lineServerApplication;
 
-	@Autowired
-	private TestRestTemplate restTemplate;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-	@Before
-	public void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         lineServerApplication.run(LineServerTestBase.SAMPLE_FILE);
     }
 
-	@Test
-	public void testBadRequests()
-	{
-	    // test negative index
+    @Test
+    public void testBadRequests()
+    {
+        // test negative index
         ResponseEntity<String> entity = this.restTemplate.getForEntity("/lines/-1", String.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST); // HTTP 400
         assertThat(entity.getBody()).isEqualTo("Illegal line index.");
@@ -60,7 +60,7 @@ public class LineServerApplicationTests
         entity = this.restTemplate.getForEntity("/lines/abc", String.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST); // HTTP 400
         assertThat(entity.getBody()).contains("For input string: \"abc\"");
-	}
+    }
 
     @Test
     public void testValidLineIndex()
